@@ -1,9 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import styles from './ContactForm.module.css';
+
 class Form extends Component {
-    static propTypes = {};
-    static defaultProp = {};
+    static propTypes = {
+      name: PropTypes.string,
+      number: PropTypes.string,
+      handleSubmit: PropTypes.func,
+      handleChange: PropTypes.func,
+    };
+
+    static defaultProps = {
+      name: '',
+      number: ''
+    }
+
 
     state = {
       name: "",
@@ -27,25 +39,25 @@ handleSubmit = e => {
     number: "",
   });
 };
-
-    render() {
+   
+render() {
       const { name, number } = this.state;
         return (
-        <form className="TaskEditor" onSubmit={this.handleSubmit}>
-        <label className="TaskEditor-label">
+        <form className={styles.TaskEditor} onSubmit={this.handleSubmit}>
+        <label className={styles.TaskEditorLabel}>
           Name
           <input
-            className="TaskEditor-input"
+            className={styles.TaskEditorInput}
             type="text"
             value={name}
             onChange={this.handleChange}
             data-row="name"
           />
         </label>
-        <label className="TaskEditor-label">
+        <label className={styles.TaskEditorLabel}>
           Number
           <input
-            className="TaskEditor-input"
+            className={styles.TaskEditorInput}
             type="text"
             value={number}
             onChange={this.handleChange}
@@ -53,7 +65,7 @@ handleSubmit = e => {
           />
         </label>
 
-        <button type="submit" className="TaskEditor-button">
+        <button type="submit" className={styles.TaskEditorButton} >
           Add contact
         </button>
       </form>)

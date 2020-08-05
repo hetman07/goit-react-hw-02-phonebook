@@ -5,11 +5,27 @@ import ContactForm from "./ContactForm/ContactForm";
 import Filter from "./Filter/Filter";
 import ContactList from "./ContactList/ContactList";
 
-import "./App.css";
-
 export default class App extends Component {
-  static propTypes = {};
-  static defaultProp = {};
+  static propTypes = {
+    state: PropTypes.shape({
+      contacts: PropTypes.arrayOf(
+        PropTypes.exact({
+          id: PropTypes.string.isRequired,
+          name: PropTypes.string.isRequired,
+          number: PropTypes.string.isRequired,
+        }),
+      ),
+      filter: PropTypes.string,
+    }),
+    getVisibleContacts: PropTypes.func,
+    addContact: PropTypes.func,
+    changeFilter: PropTypes.func,
+    removeContact: PropTypes.func,
+  };
+
+  static defaultProp = {
+    filter: "",
+  };
 
   state = {
     contacts: [
@@ -22,15 +38,34 @@ export default class App extends Component {
   };
 
   addContact = (name, number) => {
-    const contact = {
-      id: uuidv4(),
-      name,
-      number,
-    };
+    const { contacts } = this.state;
+    if (
+      contacts.find(
+        contact => contact.name.toLowerCase() === name.toLowerCase(),
+      )
+    ) {
+      alert(`CONTACT ${name} IS ALREADY IN CONTACTS.`);
+    } else if (name === "" || number === "") {
+      alert(`FOR ADD CONTACT IN PHONEBOOK YOU MUST FILLED ALL FIELDS`);
+    } else {
+      const contact = {
+        id: uuidv4(),
+        name,
+        number,
+      };
 
+      this.setState(prevState => {
+        return {
+          contacts: [...prevState.contacts, contact],
+        };
+      });
+    }
+  };
+
+  removeContact = contactId => {
     this.setState(prevState => {
       return {
-        contacts: [...prevState.contacts, contact],
+        contacts: prevState.contacts.filter(({ id }) => id !== contactId),
       };
     });
   };
@@ -57,7 +92,10 @@ export default class App extends Component {
         <ContactForm onAddContact={this.addContact} />
         <Filter value={filter} onChangeFilter={this.changeFilter} />
         {visibleContacts.length > 0 && (
-          <ContactList contacts={visibleContacts} />
+          <ContactList
+            contacts={visibleContacts}
+            onRemove={this.removeContact}
+          />
         )}
       </div>
     );
