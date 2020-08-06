@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { v4 as uuidv4 } from "uuid";
-import ContactForm from "./ContactForm/ContactForm";
-import Filter from "./Filter/Filter";
-import ContactList from "./ContactList/ContactList";
+import ContactForm from "./components/ContactForm";
+import Filter from "./components/Filter";
+import ContactList from "./components/ContactList";
 
 export default class App extends Component {
   static propTypes = {
@@ -87,7 +87,7 @@ export default class App extends Component {
     const visibleContacts = this.getVisibleContacts();
     const { filter } = this.state;
     return (
-      <div>
+      <>
         <h1>Phonebook</h1>
         <ContactForm onAddContact={this.addContact} />
         <Filter value={filter} onChangeFilter={this.changeFilter} />
@@ -97,7 +97,7 @@ export default class App extends Component {
             onRemove={this.removeContact}
           />
         )}
-      </div>
+      </>
     );
   }
 }
